@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.jshvarts.healthreads.R
 import com.jshvarts.healthreads.databinding.FragmentBookListBinding
 import com.jshvarts.healthreads.domain.Book
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BookListFragment : Fragment() {
@@ -45,11 +47,13 @@ class BookListFragment : Fragment() {
       adapter = recyclerViewAdapter
     }
 
-    viewModel.books.observe(viewLifecycleOwner) {
-      when (it) {
-        is BookListViewState.Loading -> renderLoadingState()
-        is BookListViewState.Error -> renderErrorState()
-        is BookListViewState.Data -> renderDataState(it.books)
+    viewLifecycleOwner.lifecycleScope.launch {
+      viewModel.viewState.collect {
+        when (it) {
+          is BookListViewState.Loading -> renderLoadingState()
+          is BookListViewState.Error -> renderErrorState()
+          is BookListViewState.Data -> renderDataState(it.books)
+        }
       }
     }
 

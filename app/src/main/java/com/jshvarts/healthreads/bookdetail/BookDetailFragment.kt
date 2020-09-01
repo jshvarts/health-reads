@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +14,8 @@ import com.jshvarts.healthreads.databinding.FragmentBookDetailBinding
 import com.jshvarts.healthreads.domain.Book
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BookDetailFragment : Fragment() {
@@ -52,11 +54,13 @@ class BookDetailFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    viewModel.book.observe(viewLifecycleOwner) {
-      when (it) {
-        is DetailViewState.Loading -> renderLoadingState()
-        is DetailViewState.Error -> renderErrorState()
-        is DetailViewState.Data -> renderDataState(it.book)
+    viewLifecycleOwner.lifecycleScope.launch {
+      viewModel.viewState.collect {
+        when (it) {
+          is DetailViewState.Loading -> renderLoadingState()
+          is DetailViewState.Error -> renderErrorState()
+          is DetailViewState.Data -> renderDataState(it.book)
+        }
       }
     }
 
