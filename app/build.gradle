@@ -50,5 +50,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
+    implementation "org.koin:koin-android:$koin_version"
+
     testImplementation 'junit:junit:4.13'
 }
