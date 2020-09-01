@@ -6,9 +6,9 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.jshvarts.healthreads.databinding.ItemBookBinding
 import com.jshvarts.healthreads.domain.Book
-import com.squareup.picasso.Picasso
 
 private const val IMAGE_WIDTH = 400
 
@@ -40,15 +40,13 @@ class BookViewHolder(
   private val itemContainerView = binding.itemContainer
 
   fun bind(item: Book) {
+
     bookImageView.apply {
-      Picasso.get()
-        .load(item.imageUrl)
-        .resize(IMAGE_WIDTH, IMAGE_WIDTH)
-        .centerCrop()
-        .into(this)
+      load(item.imageUrl) {
+        crossfade(true)
+      }
       transitionName = item.isbn
     }
-
     bookTitleView.text = item.title
     itemContainerView.setOnClickListener {
       clickListener.invoke(item, bookImageView)

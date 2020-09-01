@@ -8,15 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
+import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.jshvarts.healthreads.R
 import com.jshvarts.healthreads.databinding.FragmentBookDetailBinding
 import com.jshvarts.healthreads.domain.Book
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class BookDetailFragment : Fragment() {
   private val args by navArgs<BookDetailFragmentArgs>()
@@ -25,16 +25,6 @@ class BookDetailFragment : Fragment() {
 
   private var _binding: FragmentBookDetailBinding? = null
   private val binding get() = _binding!!
-
-  private val imageLoadingCallback = object : Callback {
-    override fun onSuccess() {
-      startPostponedEnterTransition()
-    }
-
-    override fun onError(e: Exception?) {
-      // no-op
-    }
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -87,9 +77,17 @@ class BookDetailFragment : Fragment() {
 
   private fun renderDataState(book: Book) {
     binding.loadingIndicator.visibility = View.GONE
-    Picasso.get()
-      .load(book.imageUrl)
-      .into(binding.bookImage, imageLoadingCallback)
+
+    binding.bookImage.load(book.imageUrl) {
+      listener(
+        onError = { _, throwable ->
+          Timber.e(throwable, "Error downloading book image")
+        },
+        onSuccess = { _, _ ->
+          startPostponedEnterTransition()
+        }
+      )
+    }
     binding.bookImage.transitionName = args.isbn
     binding.bookTitle.text = book.title
     binding.contributor.text = book.contributor
