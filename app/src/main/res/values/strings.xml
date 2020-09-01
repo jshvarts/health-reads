@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Health Reads</string>
+    <string name="nav_title_book_detail">Book Detail</string>
 </resources>
