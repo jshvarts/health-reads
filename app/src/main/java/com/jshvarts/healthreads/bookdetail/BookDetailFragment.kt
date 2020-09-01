@@ -14,7 +14,7 @@ import com.jshvarts.healthreads.databinding.FragmentBookDetailBinding
 import com.jshvarts.healthreads.domain.Book
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BookDetailFragment : Fragment() {
   private val args by navArgs<BookDetailFragmentArgs>()

@@ -13,8 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jshvarts.healthreads.R
 import com.jshvarts.healthreads.databinding.FragmentBookListBinding
 import com.jshvarts.healthreads.domain.Book
-import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BookListFragment : Fragment() {
   private val viewModel: BookListViewModel by viewModel()
