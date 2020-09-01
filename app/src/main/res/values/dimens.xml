@@ -4,4 +4,5 @@
     <dimen name="spacing_medium">16dp</dimen>
     <dimen name="spacing_large">32dp</dimen>
     <dimen name="spacing_extra_large">48dp</dimen>
+    <dimen name="book_detail_title_text_size">28sp</dimen>
 </resources>

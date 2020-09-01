@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
+import com.jshvarts.healthreads.R
 import com.jshvarts.healthreads.databinding.FragmentBookListBinding
 import com.jshvarts.healthreads.domain.Book
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class BookListFragment : Fragment() {
   private val viewModel: BookListViewModel by viewModel()
@@ -21,6 +24,10 @@ class BookListFragment : Fragment() {
 
   private val recyclerViewAdapter = BookListAdapter { book, bookImageView ->
     onBookClicked(book, bookImageView)
+  }
+
+  private val refreshAfterErrorListener = View.OnClickListener {
+    loadBookList()
   }
 
   override fun onCreateView(
@@ -40,15 +47,46 @@ class BookListFragment : Fragment() {
     }
 
     viewModel.books.observe(viewLifecycleOwner) {
-      recyclerViewAdapter.submitList(it)
+      when (it) {
+        is BookListViewState.Loading -> renderLoadingState()
+        is BookListViewState.Error -> renderErrorState()
+        is BookListViewState.Data -> renderDataState(it.books)
+      }
     }
 
-    viewModel.getBooks()
+    binding.pullToRefresh.setOnRefreshListener {
+      loadBookList()
+    }
+
+    loadBookList()
   }
 
   override fun onDestroyView() {
     _binding = null
     super.onDestroyView()
+  }
+
+  private fun renderLoadingState() {
+    binding.pullToRefresh.isRefreshing = true
+  }
+
+  private fun renderErrorState() {
+    binding.pullToRefresh.isRefreshing = false
+    Snackbar.make(
+      binding.root,
+      R.string.error_message,
+      Snackbar.LENGTH_INDEFINITE
+    ).setAction(R.string.refresh_button_text, refreshAfterErrorListener)
+      .show()
+  }
+
+  private fun renderDataState(books: List<Book>) {
+    binding.pullToRefresh.isRefreshing = false
+    recyclerViewAdapter.submitList(books)
+  }
+
+  private fun loadBookList() {
+    viewModel.getBooks()
   }
 
   private fun onBookClicked(book: Book, bookImageView: ImageView) {

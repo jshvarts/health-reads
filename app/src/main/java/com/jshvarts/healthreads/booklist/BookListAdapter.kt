@@ -10,7 +10,7 @@ import com.jshvarts.healthreads.databinding.ItemBookBinding
 import com.jshvarts.healthreads.domain.Book
 import com.squareup.picasso.Picasso
 
-private const val IMAGE_WIDTH = 250
+private const val IMAGE_WIDTH = 400
 
 class BookListAdapter(
   private val clickListener: (Book, ImageView) -> Unit
