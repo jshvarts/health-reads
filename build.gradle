@@ -11,6 +11,26 @@ buildscript {
     }
 }
 
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.12.0"
+}
+
+detekt {
+    toolVersion = "1.12.0"
+    input = files("$projectDir")
+    config = files("$project.projectDir/config/detekt/detekt.yml")
+    reports {
+        xml {
+            enabled = true
+            destination = file("$project.projectDir/build/reports/detekt/detekt-report.xml")
+        }
+        html {
+            enabled = true
+            destination = file("$project.projectDir/build/reports/detekt/detekt-report.html")
+        }
+    }
+}
+
 allprojects {
     repositories {
         google()
