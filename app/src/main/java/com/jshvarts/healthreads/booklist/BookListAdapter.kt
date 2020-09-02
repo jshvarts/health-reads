@@ -10,8 +10,6 @@ import coil.load
 import com.jshvarts.healthreads.databinding.ItemBookBinding
 import com.jshvarts.healthreads.domain.Book
 
-private const val IMAGE_WIDTH = 400
-
 class BookListAdapter(
   private val clickListener: (Book, ImageView) -> Unit
 ) : ListAdapter<Book, BookViewHolder>(BookDiffCallback()) {
@@ -37,7 +35,7 @@ class BookViewHolder(
 
   private val bookTitleView = binding.bookTitle
   private val bookImageView = binding.bookImage
-  private val itemContainerView = binding.itemContainer
+  private val cardView = binding.root
 
   fun bind(item: Book) {
 
@@ -48,7 +46,7 @@ class BookViewHolder(
       transitionName = item.isbn
     }
     bookTitleView.text = item.title
-    itemContainerView.setOnClickListener {
+    cardView.setOnClickListener {
       clickListener.invoke(item, bookImageView)
     }
   }
