@@ -52,10 +52,10 @@ private val moshi = Moshi.Builder()
   .add(KotlinJsonAdapterFactory())
   .build()
 
-private fun retrofit(cache: Cache) = Retrofit.Builder()
+private fun retrofit(okHttpClient: OkHttpClient) = Retrofit.Builder()
   .baseUrl(BASE_URL)
   .addConverterFactory(MoshiConverterFactory.create(moshi))
-  .client(okHttp(cache))
+  .client(okHttpClient)
   .build()
 
 private fun httpCache(application: Application): Cache {
