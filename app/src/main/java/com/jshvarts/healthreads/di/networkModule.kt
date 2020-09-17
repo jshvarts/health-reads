@@ -2,6 +2,8 @@ package com.jshvarts.healthreads.di
 
 import android.app.Application
 import com.jshvarts.healthreads.data.Api
+import com.jshvarts.healthreads.data.CACHE_CONTROL_HEADER
+import com.jshvarts.healthreads.data.CACHE_CONTROL_NO_CACHE
 import com.jshvarts.healthreads.domain.BooksJsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -9,6 +11,7 @@ import okhttp3.Cache
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
@@ -18,7 +21,6 @@ import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://api.nytimes.com/svc/books/v3/"
 
-private const val CACHE_CONTROL_HEADER = "Cache-Control"
 private const val CACHE_SIZE = 5 * 1024 * 1024L // 5 MB
 
 val networkModule = module {
@@ -41,9 +43,9 @@ val networkModule = module {
 
 private fun okHttp(cache: Cache): OkHttpClient {
   return OkHttpClient.Builder()
-    .addInterceptor(loggingInterceptor())
-    .addNetworkInterceptor(cacheInterceptor())
     .cache(cache)
+    .addNetworkInterceptor(CacheInterceptor())
+    .addInterceptor(loggingInterceptor())
     .build()
 }
 
@@ -66,14 +68,19 @@ private fun loggingInterceptor() = HttpLoggingInterceptor().apply {
   level = HttpLoggingInterceptor.Level.HEADERS
 }
 
-private fun cacheInterceptor(): Interceptor {
-  return Interceptor { chain ->
-    val originalResponse = chain.proceed(chain.request())
+class CacheInterceptor : Interceptor {
+  override fun intercept(chain: Interceptor.Chain): Response {
+    val request = chain.request()
+    val originalResponse = chain.proceed(request)
+
+    val shouldUseCache = request.header(CACHE_CONTROL_HEADER) != CACHE_CONTROL_NO_CACHE
+    if (!shouldUseCache) return originalResponse
 
     val cacheControl = CacheControl.Builder()
       .maxAge(10, TimeUnit.MINUTES)
       .build()
-    originalResponse.newBuilder()
+
+    return originalResponse.newBuilder()
       .header(CACHE_CONTROL_HEADER, cacheControl.toString())
       .build()
   }

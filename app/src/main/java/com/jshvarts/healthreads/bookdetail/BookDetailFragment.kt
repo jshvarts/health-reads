@@ -30,7 +30,7 @@ class BookDetailFragment : Fragment() {
   private var snackbar: Snackbar? = null
 
   private val refreshOnErrorListener = View.OnClickListener {
-    loadBookDetail()
+    loadBookDetail(true)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,10 +62,10 @@ class BookDetailFragment : Fragment() {
     }
 
     binding.pullToRefresh.setOnRefreshListener {
-      loadBookDetail()
+      loadBookDetail(true)
     }
 
-    loadBookDetail()
+    loadBookDetail(false)
   }
 
   override fun onDestroyView() {
@@ -107,7 +107,7 @@ class BookDetailFragment : Fragment() {
     binding.contributor.text = book.contributor
   }
 
-  private fun loadBookDetail() {
-    viewModel.getBookDetail(args.isbn)
+  private fun loadBookDetail(forceRefresh: Boolean) {
+    viewModel.getBookDetail(args.isbn, forceRefresh)
   }
 }

@@ -18,9 +18,9 @@ class BookListViewModel(
   private val _viewState = MutableLiveData<BookListViewState>()
   val viewState: LiveData<BookListViewState> = _viewState
 
-  fun getBooks() {
+  fun getBooks(forceRefresh: Boolean) {
     viewModelScope.launch {
-      bookRepository.fetchBooks()
+      bookRepository.fetchBooks(forceRefresh)
         .onStart {
           _viewState.value = BookListViewState.Loading
         }.catch { throwable ->

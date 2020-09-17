@@ -29,7 +29,7 @@ class BookListFragment : Fragment() {
   }
 
   private val refreshOnErrorListener = View.OnClickListener {
-    loadBookList()
+    loadBookList(true)
   }
 
   override fun onCreateView(
@@ -57,10 +57,10 @@ class BookListFragment : Fragment() {
     }
 
     binding.pullToRefresh.setOnRefreshListener {
-      loadBookList()
+      loadBookList(true)
     }
 
-    loadBookList()
+    loadBookList(false)
   }
 
   override fun onDestroyView() {
@@ -90,8 +90,8 @@ class BookListFragment : Fragment() {
     recyclerViewAdapter.submitList(books)
   }
 
-  private fun loadBookList() {
-    viewModel.getBooks()
+  private fun loadBookList(forceRefresh: Boolean) {
+    viewModel.getBooks(forceRefresh)
   }
 
   private fun onBookClicked(book: Book, bookImageView: ImageView) {

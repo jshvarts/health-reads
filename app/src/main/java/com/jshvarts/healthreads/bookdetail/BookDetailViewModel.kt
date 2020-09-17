@@ -17,10 +17,10 @@ class BookDetailViewModel(
   private val _viewState = MutableStateFlow<DetailViewState>(DetailViewState.Loading)
   val viewState: StateFlow<DetailViewState> = _viewState
 
-  fun getBookDetail(isbn: String) {
+  fun getBookDetail(isbn: String, forceRefresh: Boolean) {
     viewModelScope.launch {
 
-      bookRepository.fetchBook(isbn)
+      bookRepository.fetchBook(isbn, forceRefresh)
         .onStart {
           _viewState.value = DetailViewState.Loading
         }
