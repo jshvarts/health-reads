@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Health Reads</string>
     <string name="nav_title_book_detail">Book Detail</string>
+    <string name="nav_title_add_book">Add a Book</string>
     <string name="error_message">Error loading data. Try again later.</string>
     <string name="refresh_button_text">Refresh</string>
     <string name="book_cover_image_description">Book cover image</string>
+    <string name="add_book">Add a book</string>
 </resources>
