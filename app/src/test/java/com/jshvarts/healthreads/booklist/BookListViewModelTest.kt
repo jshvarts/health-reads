@@ -74,7 +74,7 @@ class BookListViewModelTest {
         channel.send(listOf(book1, book2))
       }
 
-      bookListViewModel.getBooks()
+      bookListViewModel.getBooks(false)
 
       // THEN
       verify(viewStateObserver).onChanged(expectedViewState)
@@ -96,7 +96,7 @@ class BookListViewModelTest {
         channel.close(IOException())
       }
 
-      bookListViewModel.getBooks()
+      bookListViewModel.getBooks(false)
 
       // THEN
       verify(viewStateObserver).onChanged(BookListViewState.Error)
@@ -125,7 +125,7 @@ class BookListViewModelTest {
         channel.send(listOf(book1))
       }
 
-      bookListViewModel.getBooks()
+      bookListViewModel.getBooks(false)
 
       // THEN
       inOrder(viewStateObserver) {
@@ -133,5 +133,49 @@ class BookListViewModelTest {
         verify(viewStateObserver).onChanged(BookListViewState.Data(listOf(book1)))
       }
       verifyNoMoreInteractions(viewStateObserver)
+    }
+
+  @Test
+  fun `when should force refresh, correct repository api is called`() =
+    rule.dispatcher.runBlockingTest {
+      // GIVEN
+      val channel = Channel<List<Book>>()
+      val flow = channel.consumeAsFlow()
+
+      doReturn(flow)
+        .whenever(bookRepository)
+        .fetchBooks(forceRefresh = true)
+
+      // WHEN
+      launch {
+        channel.send(emptyList())
+      }
+
+      bookListViewModel.getBooks(forceRefresh = true)
+
+      // THEN
+      verify(bookRepository).fetchBooks(forceRefresh = true)
+    }
+
+  @Test
+  fun `when should not force refresh, correct repository api is called`() =
+    rule.dispatcher.runBlockingTest {
+      // GIVEN
+      val channel = Channel<List<Book>>()
+      val flow = channel.consumeAsFlow()
+
+      doReturn(flow)
+        .whenever(bookRepository)
+        .fetchBooks(forceRefresh = false)
+
+      // WHEN
+      launch {
+        channel.send(emptyList())
+      }
+
+      bookListViewModel.getBooks(forceRefresh = false)
+
+      // THEN
+      verify(bookRepository).fetchBooks(forceRefresh = false)
     }
 }
