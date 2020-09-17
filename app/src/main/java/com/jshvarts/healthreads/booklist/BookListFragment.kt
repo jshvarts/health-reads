@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jshvarts.healthreads.R
 import com.jshvarts.healthreads.databinding.FragmentBookListBinding
 import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.util.exhaustive
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BookListFragment : Fragment() {
@@ -50,7 +51,7 @@ class BookListFragment : Fragment() {
         is BookListViewState.Loading -> renderLoadingState()
         is BookListViewState.Error -> renderErrorState()
         is BookListViewState.Data -> renderDataState(it.books)
-      }
+      }.exhaustive
     }
 
     binding.pullToRefresh.setOnRefreshListener {

@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jshvarts.healthreads.R
 import com.jshvarts.healthreads.databinding.FragmentBookDetailBinding
 import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.util.exhaustive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -50,7 +51,7 @@ class BookDetailFragment : Fragment() {
           is DetailViewState.Loading -> renderLoadingState()
           is DetailViewState.Error -> renderErrorState()
           is DetailViewState.Data -> renderDataState(it.book)
-        }
+        }.exhaustive
       }
     }
 
