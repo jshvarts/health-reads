@@ -17,7 +17,6 @@ import com.jshvarts.healthreads.domain.Book
 import com.jshvarts.healthreads.util.exhaustive
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class BookListFragment : Fragment() {
   private val viewModel: BookListViewModel by viewModel()
 
