@@ -22,11 +22,13 @@ class BookListFragment : Fragment() {
   private var _binding: FragmentBookListBinding? = null
   private val binding get() = _binding!!
 
+  private var snackbar: Snackbar? = null
+
   private val recyclerViewAdapter = BookListAdapter { book, bookImageView ->
     onBookClicked(book, bookImageView)
   }
 
-  private val refreshAfterErrorListener = View.OnClickListener {
+  private val refreshOnErrorListener = View.OnClickListener {
     loadBookList()
   }
 
@@ -67,17 +69,20 @@ class BookListFragment : Fragment() {
   }
 
   private fun renderLoadingState() {
+    snackbar?.dismiss()
     binding.pullToRefresh.isRefreshing = true
   }
 
   private fun renderErrorState() {
     binding.pullToRefresh.isRefreshing = false
-    Snackbar.make(
+
+    snackbar = Snackbar.make(
       binding.root,
       R.string.error_message,
       Snackbar.LENGTH_INDEFINITE
-    ).setAction(R.string.refresh_button_text, refreshAfterErrorListener)
-      .show()
+    ).setAction(R.string.refresh_button_text, refreshOnErrorListener).also {
+      it.show()
+    }
   }
 
   private fun renderDataState(books: List<Book>) {

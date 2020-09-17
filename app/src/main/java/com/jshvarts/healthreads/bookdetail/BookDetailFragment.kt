@@ -27,6 +27,12 @@ class BookDetailFragment : Fragment() {
   private var _binding: FragmentBookDetailBinding? = null
   private val binding get() = _binding!!
 
+  private var snackbar: Snackbar? = null
+
+  private val refreshOnErrorListener = View.OnClickListener {
+    loadBookDetail()
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     sharedElementEnterTransition = TransitionInflater.from(context)
@@ -55,7 +61,11 @@ class BookDetailFragment : Fragment() {
       }
     }
 
-    viewModel.getBookDetail(args.isbn)
+    binding.pullToRefresh.setOnRefreshListener {
+      loadBookDetail()
+    }
+
+    loadBookDetail()
   }
 
   override fun onDestroyView() {
@@ -64,21 +74,24 @@ class BookDetailFragment : Fragment() {
   }
 
   private fun renderLoadingState() {
-    binding.loadingIndicator.visibility = View.VISIBLE
+    snackbar?.dismiss()
+    binding.pullToRefresh.isRefreshing = true
   }
 
   private fun renderErrorState() {
-    binding.loadingIndicator.visibility = View.GONE
-    Snackbar.make(
+    binding.pullToRefresh.isRefreshing = false
+
+    snackbar = Snackbar.make(
       binding.root,
       R.string.error_message,
-      Snackbar.LENGTH_LONG
-    ).show()
+      Snackbar.LENGTH_INDEFINITE
+    ).setAction(R.string.refresh_button_text, refreshOnErrorListener).also {
+      it.show()
+    }
   }
 
   private fun renderDataState(book: Book) {
-    binding.loadingIndicator.visibility = View.GONE
-
+    binding.pullToRefresh.isRefreshing = false
     binding.bookImage.load(book.imageUrl) {
       listener(
         onError = { _, throwable ->
@@ -92,5 +105,9 @@ class BookDetailFragment : Fragment() {
     binding.bookImage.transitionName = args.isbn
     binding.bookTitle.text = book.title
     binding.contributor.text = book.contributor
+  }
+
+  private fun loadBookDetail() {
+    viewModel.getBookDetail(args.isbn)
   }
 }

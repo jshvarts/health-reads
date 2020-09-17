@@ -3,4 +3,5 @@
     <string name="nav_title_book_detail">Book Detail</string>
     <string name="error_message">Error loading data. Try again later.</string>
     <string name="refresh_button_text">Refresh</string>
+    <string name="book_cover_image_description">Book cover image</string>
 </resources>
