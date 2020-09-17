@@ -1,5 +1,8 @@
 package com.jshvarts.healthreads.domain
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -16,9 +19,11 @@ import com.squareup.moshi.ToJson
  * ----> { bookN }
  */
 @JsonClass(generateAdapter = true)
+@Entity(tableName = "book")
 data class Book(
-  val title: String,
+  @PrimaryKey
   @Json(name = "primary_isbn10") val isbn: String,
+  val title: String,
   @Json(name = "book_image") val imageUrl: String,
   val contributor: String
 )
