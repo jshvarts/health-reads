@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -15,6 +16,7 @@ import com.jshvarts.healthreads.databinding.FragmentBookListBinding
 import com.jshvarts.healthreads.domain.Book
 import com.jshvarts.healthreads.util.exhaustive
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class BookListFragment : Fragment() {
   private val viewModel: BookListViewModel by viewModel()
@@ -43,6 +45,7 @@ class BookListFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    postponeEnterTransition()
 
     binding.bookListRecyclerView.apply {
       adapter = recyclerViewAdapter
@@ -61,6 +64,11 @@ class BookListFragment : Fragment() {
     }
 
     loadBookList(false)
+
+    binding.bookListRecyclerView.doOnPreDraw {
+      // parent has been drawn-we can start transition animation
+      startPostponedEnterTransition()
+    }
   }
 
   override fun onDestroyView() {
