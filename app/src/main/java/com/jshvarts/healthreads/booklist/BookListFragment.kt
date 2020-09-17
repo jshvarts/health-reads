@@ -2,6 +2,9 @@ package com.jshvarts.healthreads.booklist
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -31,6 +34,11 @@ class BookListFragment : Fragment() {
 
   private val refreshOnErrorListener = View.OnClickListener {
     loadBookList(true)
+  }
+  
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setHasOptionsMenu(true)
   }
 
   override fun onCreateView(
@@ -67,6 +75,20 @@ class BookListFragment : Fragment() {
     binding.bookListRecyclerView.doOnPreDraw {
       // parent has been drawn-we can start transition animation
       startPostponedEnterTransition()
+    }
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.book_list_menu, menu)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    return when (item.itemId) {
+      R.id.action_add -> {
+        findNavController().navigate(BookListFragmentDirections.actionListToAddBook())
+        true
+      }
+      else -> super.onOptionsItemSelected(item)
     }
   }
 
