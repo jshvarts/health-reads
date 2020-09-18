@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jshvarts.healthreads.R
 import com.jshvarts.healthreads.databinding.FragmentBookDetailBinding
 import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.ui.ErrorType
 import com.jshvarts.healthreads.util.exhaustive
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -26,12 +27,6 @@ class BookDetailFragment : Fragment() {
 
   private var _binding: FragmentBookDetailBinding? = null
   private val binding get() = _binding!!
-
-  private var snackbar: Snackbar? = null
-
-  private val refreshOnErrorListener = View.OnClickListener {
-    loadBookDetail(true)
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -55,7 +50,7 @@ class BookDetailFragment : Fragment() {
       viewModel.viewState.collect {
         when (it) {
           is DetailViewState.Loading -> renderLoadingState()
-          is DetailViewState.Error -> renderErrorState()
+          is DetailViewState.Error -> renderErrorState(it.type)
           is DetailViewState.Data -> renderDataState(it.book)
         }.exhaustive
       }
@@ -74,20 +69,18 @@ class BookDetailFragment : Fragment() {
   }
 
   private fun renderLoadingState() {
-    snackbar?.dismiss()
     binding.pullToRefresh.isRefreshing = true
   }
 
-  private fun renderErrorState() {
+  private fun renderErrorState(errorType: ErrorType) {
     binding.pullToRefresh.isRefreshing = false
 
-    snackbar = Snackbar.make(
-      binding.root,
-      R.string.error_message,
-      Snackbar.LENGTH_INDEFINITE
-    ).setAction(R.string.refresh_button_text, refreshOnErrorListener).also {
-      it.show()
-    }
+    val messageResId = when (errorType) {
+      ErrorType.CONNECTION -> R.string.error_message_offline
+      ErrorType.GENERIC -> R.string.generic_error_message
+    }.exhaustive
+
+    Snackbar.make(binding.root, messageResId, Snackbar.LENGTH_LONG).show()
   }
 
   private fun renderDataState(book: Book) {

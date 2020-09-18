@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jshvarts.healthreads.R
 import com.jshvarts.healthreads.databinding.FragmentBookListBinding
 import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.ui.ErrorType
 import com.jshvarts.healthreads.util.exhaustive
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,16 +27,10 @@ class BookListFragment : Fragment() {
   private var _binding: FragmentBookListBinding? = null
   private val binding get() = _binding!!
 
-  private var snackbar: Snackbar? = null
-
   private val recyclerViewAdapter = BookListAdapter { book, bookImageView ->
     onBookClicked(book, bookImageView)
   }
 
-  private val refreshOnErrorListener = View.OnClickListener {
-    loadBookList(true)
-  }
-  
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setHasOptionsMenu(true)
@@ -61,7 +56,7 @@ class BookListFragment : Fragment() {
     viewModel.viewState.observe(viewLifecycleOwner) {
       when (it) {
         is BookListViewState.Loading -> renderLoadingState()
-        is BookListViewState.Error -> renderErrorState()
+        is BookListViewState.Error -> renderErrorState(it.type)
         is BookListViewState.Data -> renderDataState(it.books)
       }.exhaustive
     }
@@ -98,20 +93,18 @@ class BookListFragment : Fragment() {
   }
 
   private fun renderLoadingState() {
-    snackbar?.dismiss()
     binding.pullToRefresh.isRefreshing = true
   }
 
-  private fun renderErrorState() {
+  private fun renderErrorState(errorType: ErrorType) {
     binding.pullToRefresh.isRefreshing = false
 
-    snackbar = Snackbar.make(
-      binding.root,
-      R.string.error_message,
-      Snackbar.LENGTH_INDEFINITE
-    ).setAction(R.string.refresh_button_text, refreshOnErrorListener).also {
-      it.show()
-    }
+    val messageResId = when (errorType) {
+      ErrorType.CONNECTION -> R.string.error_message_offline
+      ErrorType.GENERIC -> R.string.generic_error_message
+    }.exhaustive
+
+    Snackbar.make(binding.root, messageResId, Snackbar.LENGTH_LONG).show()
   }
 
   private fun renderDataState(books: List<Book>) {

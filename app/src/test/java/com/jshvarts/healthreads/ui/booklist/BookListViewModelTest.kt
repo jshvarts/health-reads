@@ -5,6 +5,8 @@ import androidx.lifecycle.Observer
 import com.jshvarts.healthreads.data.BookRepository
 import com.jshvarts.healthreads.domain.Book
 import com.jshvarts.healthreads.threading.CoroutineTestRule
+import com.jshvarts.healthreads.ui.ConnectionHelper
+import com.jshvarts.healthreads.ui.ErrorType
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.inOrder
 import com.nhaarman.mockitokotlin2.mock
@@ -31,13 +33,15 @@ class BookListViewModelTest {
 
   private val bookRepository = mock<BookRepository>()
 
+  private val connectionHelper = mock<ConnectionHelper>()
+
   private val viewStateObserver = mock<Observer<BookListViewState>>()
 
   private lateinit var bookListViewModel: BookListViewModel
 
   @Before
   fun setUp() {
-    bookListViewModel = BookListViewModel(bookRepository).apply {
+    bookListViewModel = BookListViewModel(bookRepository, connectionHelper).apply {
       viewState.observeForever(viewStateObserver)
     }
   }
@@ -81,9 +85,13 @@ class BookListViewModelTest {
     }
 
   @Test
-  fun `when error on books lookup occurs, error view state is observed`() =
+  fun `when error on books lookup occurs and there is connection, generic error view state is observed`() =
     rule.dispatcher.runBlockingTest {
       // GIVEN
+      doReturn(true)
+        .whenever(connectionHelper)
+        .isConnected()
+
       val channel = Channel<List<Book>>()
       val flow = channel.consumeAsFlow()
 
@@ -99,7 +107,33 @@ class BookListViewModelTest {
       bookListViewModel.getBooks(false)
 
       // THEN
-      verify(viewStateObserver).onChanged(BookListViewState.Error)
+      verify(viewStateObserver).onChanged(BookListViewState.Error(ErrorType.GENERIC))
+    }
+
+  @Test
+  fun `when error on books lookup occurs and no connection, connection error view state is observed`() =
+    rule.dispatcher.runBlockingTest {
+      // GIVEN
+      doReturn(false)
+        .whenever(connectionHelper)
+        .isConnected()
+
+      val channel = Channel<List<Book>>()
+      val flow = channel.consumeAsFlow()
+
+      doReturn(flow)
+        .whenever(bookRepository)
+        .fetchBooks()
+
+      // WHEN
+      launch {
+        channel.close(IOException())
+      }
+
+      bookListViewModel.getBooks(false)
+
+      // THEN
+      verify(viewStateObserver).onChanged(BookListViewState.Error(ErrorType.CONNECTION))
     }
 
   @Test
