@@ -3,6 +3,7 @@ package com.jshvarts.healthreads
 import android.app.Application
 import com.jshvarts.healthreads.di.networkModule
 import com.jshvarts.healthreads.di.repoModule
+import com.jshvarts.healthreads.di.uiHelperModule
 import com.jshvarts.healthreads.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,7 +19,7 @@ class HealthReadsApplication : Application() {
     startKoin {
       androidLogger(Level.DEBUG)
       androidContext(this@HealthReadsApplication)
-      modules(listOf(repoModule, networkModule, viewModelModule))
+      modules(listOf(repoModule, networkModule, viewModelModule, uiHelperModule))
     }
 
     if (BuildConfig.DEBUG) {
