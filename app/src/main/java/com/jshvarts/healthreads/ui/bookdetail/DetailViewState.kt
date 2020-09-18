@@ -1,4 +1,4 @@
-package com.jshvarts.healthreads.bookdetail
+package com.jshvarts.healthreads.ui.bookdetail
 
 import com.jshvarts.healthreads.domain.Book
 

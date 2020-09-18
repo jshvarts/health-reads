@@ -1,4 +1,4 @@
-package com.jshvarts.healthreads.addbook
+package com.jshvarts.healthreads.ui.addbook
 
 import android.os.Bundle
 import android.view.LayoutInflater
