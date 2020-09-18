@@ -1,4 +1,4 @@
-package com.jshvarts.healthreads.booklist
+package com.jshvarts.healthreads.ui.booklist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

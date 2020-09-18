@@ -1,7 +1,7 @@
 package com.jshvarts.healthreads.di
 
-import com.jshvarts.healthreads.bookdetail.BookDetailViewModel
-import com.jshvarts.healthreads.booklist.BookListViewModel
+import com.jshvarts.healthreads.ui.bookdetail.BookDetailViewModel
+import com.jshvarts.healthreads.ui.booklist.BookListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
