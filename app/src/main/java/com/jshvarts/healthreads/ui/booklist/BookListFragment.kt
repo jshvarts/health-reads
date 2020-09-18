@@ -99,12 +99,12 @@ class BookListFragment : Fragment() {
   private fun renderErrorState(errorType: ErrorType) {
     binding.pullToRefresh.isRefreshing = false
 
-    val messageResId = when (errorType) {
+    val errorMessageResId = when (errorType) {
       ErrorType.CONNECTION -> R.string.error_message_offline
       ErrorType.GENERIC -> R.string.generic_error_message
-    }.exhaustive
+    }
 
-    Snackbar.make(binding.root, messageResId, Snackbar.LENGTH_LONG).show()
+    Snackbar.make(binding.root, errorMessageResId, Snackbar.LENGTH_LONG).show()
   }
 
   private fun renderDataState(books: List<Book>) {

@@ -3,7 +3,7 @@
     <string name="nav_title_book_detail">Book Detail</string>
     <string name="nav_title_add_book">Add a Book</string>
     <string name="generic_error_message">Error loading data. Please try again later.</string>
-    <string name="error_message_offline">You are currently offline.</string>
+    <string name="error_message_offline">You are currently offline</string>
     <string name="book_cover_image_description">Book cover image</string>
     <string name="add_book">Add a book</string>
 </resources>
