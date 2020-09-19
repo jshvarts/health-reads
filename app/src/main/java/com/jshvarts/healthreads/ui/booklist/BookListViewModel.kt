@@ -22,6 +22,7 @@ class BookListViewModel(
   val viewState: LiveData<BookListViewState> = _viewState
 
   fun getBooks(forceRefresh: Boolean) {
+    // this scope will be canceled when ViewModel's onCleared() is called
     viewModelScope.launch {
       bookRepository.fetchBooks(forceRefresh)
         .onStart {

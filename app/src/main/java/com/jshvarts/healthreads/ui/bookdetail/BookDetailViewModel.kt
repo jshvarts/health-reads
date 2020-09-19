@@ -21,6 +21,7 @@ class BookDetailViewModel(
   val viewState: StateFlow<DetailViewState> = _viewState
 
   fun getBookDetail(isbn: String, forceRefresh: Boolean) {
+    // this scope will be canceled when ViewModel's onCleared() is called
     viewModelScope.launch {
 
       bookRepository.fetchBook(isbn, forceRefresh)

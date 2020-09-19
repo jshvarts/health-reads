@@ -53,6 +53,7 @@ class BookListFragment : Fragment() {
       adapter = recyclerViewAdapter
     }
 
+    // when LifecycleOwner is destroyed, LiveData cleans up its references
     viewModel.viewState.observe(viewLifecycleOwner) {
       when (it) {
         is BookListViewState.Loading -> renderLoadingState()

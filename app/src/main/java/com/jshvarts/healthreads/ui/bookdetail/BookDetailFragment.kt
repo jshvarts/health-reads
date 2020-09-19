@@ -46,6 +46,7 @@ class BookDetailFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    // this scope will be cancelled when the LifecycleOwner's Lifecycle is destroyed
     viewLifecycleOwner.lifecycleScope.launch {
       viewModel.viewState.collect {
         when (it) {
