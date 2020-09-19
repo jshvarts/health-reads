@@ -3,7 +3,6 @@ package com.jshvarts.healthreads.di
 import com.jshvarts.healthreads.data.network.Api
 import com.jshvarts.healthreads.domain.BooksJsonAdapter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -35,7 +34,6 @@ private fun okHttp(): OkHttpClient {
 
 private val moshi = Moshi.Builder()
   .add(BooksJsonAdapter())
-  .add(KotlinJsonAdapterFactory())
   .build()
 
 private fun retrofit(okHttpClient: OkHttpClient) = Retrofit.Builder()
