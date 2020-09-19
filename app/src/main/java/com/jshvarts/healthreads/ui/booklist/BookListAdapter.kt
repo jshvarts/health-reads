@@ -1,6 +1,7 @@
 package com.jshvarts.healthreads.ui.booklist
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
@@ -31,13 +32,19 @@ class BookListAdapter(
 class BookViewHolder(
   binding: ItemBookBinding,
   private val clickListener: (Book, ImageView) -> Unit
-) : RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+
+  private lateinit var item: Book
 
   private val bookTitleView = binding.bookTitle
   private val bookImageView = binding.bookImage
-  private val cardView = binding.root
+
+  init {
+    binding.root.setOnClickListener(this)
+  }
 
   fun bind(item: Book) {
+    this.item = item
 
     bookImageView.apply {
       load(item.imageUrl) {
@@ -46,9 +53,10 @@ class BookViewHolder(
       transitionName = item.isbn
     }
     bookTitleView.text = item.title
-    cardView.setOnClickListener {
-      clickListener.invoke(item, bookImageView)
-    }
+  }
+
+  override fun onClick(v: View?) {
+    v?.let { clickListener.invoke(item, bookImageView) }
   }
 }
 
