@@ -17,6 +17,8 @@ class BookRepository(
 
   suspend fun fetchBook(isbn: String, forceRefresh: Boolean = false): Flow<Result<Book>> {
     return flow {
+      // unfortunately, NYTimes does not provide a feed to load a single book by isbn or some id.
+      // so we fetch all books again and filter the response by the isbn needed
       val book = loadBooks(forceRefresh).first { it.isbn == isbn }
       emit(Result.success(book))
     }.catch { emit(Result.failure(it)) }
