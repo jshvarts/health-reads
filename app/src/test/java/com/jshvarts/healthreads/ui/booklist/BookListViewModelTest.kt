@@ -3,7 +3,7 @@ package com.jshvarts.healthreads.ui.booklist
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.jshvarts.healthreads.data.BookRepository
-import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.data.model.Book
 import com.jshvarts.healthreads.threading.CoroutineTestRule
 import com.jshvarts.healthreads.ui.ConnectionHelper
 import com.jshvarts.healthreads.ui.ErrorType

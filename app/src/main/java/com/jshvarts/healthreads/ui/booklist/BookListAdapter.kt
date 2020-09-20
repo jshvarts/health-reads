@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.jshvarts.healthreads.databinding.ItemBookBinding
-import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.data.model.Book
 
 class BookListAdapter(
   private val clickListener: (Book, ImageView) -> Unit

@@ -2,7 +2,7 @@ package com.jshvarts.healthreads.data
 
 import com.jshvarts.healthreads.data.network.Api
 import com.jshvarts.healthreads.data.persistence.BookDao
-import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.data.model.Book
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.inOrder

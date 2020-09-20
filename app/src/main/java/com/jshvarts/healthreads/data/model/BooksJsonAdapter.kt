@@ -1,4 +1,4 @@
-package com.jshvarts.healthreads.domain
+package com.jshvarts.healthreads.data.model
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonClass

@@ -1,7 +1,7 @@
 package com.jshvarts.healthreads.di
 
 import com.jshvarts.healthreads.data.network.Api
-import com.jshvarts.healthreads.domain.BooksJsonAdapter
+import com.jshvarts.healthreads.data.model.BooksJsonAdapter
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

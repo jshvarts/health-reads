@@ -2,7 +2,7 @@ package com.jshvarts.healthreads.data
 
 import com.jshvarts.healthreads.data.network.Api
 import com.jshvarts.healthreads.data.persistence.BookDao
-import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.data.model.Book
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
