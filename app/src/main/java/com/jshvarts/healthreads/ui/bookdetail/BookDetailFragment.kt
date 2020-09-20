@@ -12,7 +12,7 @@ import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.jshvarts.healthreads.R
 import com.jshvarts.healthreads.databinding.FragmentBookDetailBinding
-import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.data.model.Book
 import com.jshvarts.healthreads.ui.ErrorType
 import com.jshvarts.healthreads.util.exhaustive
 import kotlinx.coroutines.flow.collect

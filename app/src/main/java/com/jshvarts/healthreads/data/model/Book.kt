@@ -1,4 +1,4 @@
-package com.jshvarts.healthreads.domain
+package com.jshvarts.healthreads.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

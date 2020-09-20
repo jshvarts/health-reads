@@ -1,6 +1,6 @@
 package com.jshvarts.healthreads.ui.bookdetail
 
-import com.jshvarts.healthreads.domain.Book
+import com.jshvarts.healthreads.data.model.Book
 import com.jshvarts.healthreads.ui.ErrorType
 
 sealed class DetailViewState {

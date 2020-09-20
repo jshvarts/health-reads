@@ -1,8 +1,8 @@
 package com.jshvarts.healthreads.data.network
 
 import com.jshvarts.healthreads.BuildConfig
-import com.jshvarts.healthreads.domain.Book
-import com.jshvarts.healthreads.domain.WrappedBookList
+import com.jshvarts.healthreads.data.model.Book
+import com.jshvarts.healthreads.data.model.WrappedBookList
 import retrofit2.http.GET
 
 private const val API_KEY = BuildConfig.NYT_API_KEY
